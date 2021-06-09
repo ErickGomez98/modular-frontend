@@ -1,0 +1,20 @@
+#plot svg {
+  background-color: black;
+}
+
+#plot {
+  width: 745px;
+  height: 816px;
+}
+
+.player-list-item {
+  padding: 10px;
+  -webkit-transition: box-shadow 100ms linear;
+  -ms-transition: box-shadow 100ms linear;
+  transition: box-shadow 100ms linear;
+}
+.active-item-list {
+  box-shadow: 0px 5px 13px 0px rgba(0, 0, 0, 0.14);
+  -webkit-box-shadow: 0px 5px 13px 0px rgba(0, 0, 0, 0.14);
+  -moz-box-shadow: 0px 5px 13px 0px rgba(0, 0, 0, 0.14);
+}
