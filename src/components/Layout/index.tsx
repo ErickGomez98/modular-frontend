@@ -22,7 +22,7 @@ const Layout: FC = () => {
           <Menu.Item
             key="1"
             onClick={() => {
-              navigateTo("/report", "Reportes");
+              navigateTo("/report/223", "Reportes");
             }}
           >
             Reportes
@@ -43,7 +43,7 @@ const Layout: FC = () => {
         </Breadcrumb>
         <div className="site-layout-content">
           <Switch>
-            <Route path="/report">
+            <Route path="/report/:gameId">
               <ReportDetail />
             </Route>
             <Route path="/nav2">

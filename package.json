@@ -13,8 +13,10 @@
     "@types/react-dom": "^17.0.0",
     "@types/react-router-dom": "^5.1.7",
     "antd": "^4.15.6",
+    "axios": "^0.21.1",
     "chart.js": "^3.3.2",
     "d3": "^6.7.0",
+    "env-cmd": "^10.1.0",
     "moment-timezone": "^0.5.33",
     "react": "^17.0.2",
     "react-chartjs-2": "^3.0.3",
@@ -25,8 +27,10 @@
     "web-vitals": "^1.0.1"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "env-cmd -f env.local react-scripts start",
+    "start:dev": "env-cmd -f env.development react-scripts start",
+    "build": "env-cmd -f env.local react-scripts build",
+    "build:dev": "env-cmd -f env.development react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

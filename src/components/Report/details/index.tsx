@@ -13,10 +13,13 @@ import {
   Avatar,
   List,
   Statistic,
+  Skeleton,
 } from "antd";
-import { Player } from "./interfaces";
+import { GameDetail, Player } from "./interfaces";
 import DetailCard from "./DetailCard";
 import { Radar } from "react-chartjs-2";
+import axios from "axios";
+import { useParams } from "react-router";
 const { Title } = Typography;
 const { Option } = Select;
 const height = 816;
@@ -24,2411 +27,48 @@ const width = 745;
 let xScale = d3.scaleLinear().domain([-160, 190]).range([0, width]);
 let yScale = d3.scaleLinear().domain([-115, 106]).range([height, 0]);
 
-const data = [
-  {
-    timestamp: 1621890228,
-    players: [
-      {
-        isGameCreator: true,
-        statistics: {
-          colaboration: true,
-          actionsDone: 10,
-          effectiveCommunication: 7,
-          taskCompletion: 4,
-          exploration: 2,
-          ineffectiveComunication: 3,
-          accompaniment: 2,
-        },
-        id: 0,
-        history: {
-          actions: [
-            { timestamp: 0, text: "Juego completado" },
-            { timestamp: 0, text: "Piedra recogida" },
-            { timestamp: 0, text: "Objetivo cumplido: Mata un caballo" },
-            {
-              timestamp: 0,
-              text: "Objetivo cumplido: Recoge carne de caballo",
-            },
-          ],
-        },
-        email: "erick0gomez98@gmail.com",
-        nickName: "erick",
-        position: {
-          x: -9.669440269,
-          y: 0.2304488868,
-        },
-        color: "#64b5f6",
-      },
-      {
-        isGameCreator: false,
-        statistics: {
-          colaboration: true,
-          actionsDone: 10,
-          effectiveCommunication: 7,
-          taskCompletion: 4,
-          exploration: 2,
-          ineffectiveComunication: 3,
-          accompaniment: 2,
-        },
-        id: 1,
-        history: {
-          actions: [
-            { timestamp: 0, text: "Juego completado" },
-            { timestamp: 0, text: "Piedra recogida" },
-            { timestamp: 0, text: "Objetivo cumplido: Mata un caballo" },
-            {
-              timestamp: 0,
-              text: "Objetivo cumplido: Recoge carne de caballo",
-            },
-          ],
-        },
-        email: "a@a.com",
-        nickName: "omar",
-        position: {
-          x: -8.256337166,
-          y: -1.89915812,
-        },
-        color: "#9575cd",
-      },
-      {
-        isGameCreator: false,
-        statistics: {
-          colaboration: true,
-          actionsDone: 10,
-          effectiveCommunication: 7,
-          taskCompletion: 4,
-          exploration: 2,
-          ineffectiveComunication: 3,
-          accompaniment: 2,
-        },
-        id: 2,
-        history: {
-          actions: [
-            { timestamp: 0, text: "Juego completado" },
-            { timestamp: 0, text: "Piedra recogida" },
-            { timestamp: 0, text: "Objetivo cumplido: Mata un caballo" },
-            {
-              timestamp: 0,
-              text: "Objetivo cumplido: Recoge carne de caballo",
-            },
-          ],
-        },
-        email: "b@b.com",
-        nickName: "rodrigo",
-        position: {
-          x: -10.52549553,
-          y: 1.639630914,
-        },
-        color: "#81c784",
-      },
-    ],
-  },
-  {
-    timestamp: 1621890229,
-    players: [
-      {
-        isGameCreator: false,
-        statistics: {
-          colaboration: true,
-          actionsDone: 10,
-          effectiveCommunication: 7,
-          taskCompletion: 4,
-          exploration: 2,
-          ineffectiveComunication: 3,
-          accompaniment: 2,
-        },
-        id: 0,
-        history: {
-          actions: [
-            { timestamp: 0, text: "Juego completado" },
-            { timestamp: 0, text: "Piedra recogida" },
-            { timestamp: 0, text: "Objetivo cumplido: Mata un caballo" },
-            {
-              timestamp: 0,
-              text: "Objetivo cumplido: Recoge carne de caballo",
-            },
-          ],
-        },
-        email: "erick0gomez98@gmail.com",
-        nickName: "erick",
-        position: {
-          x: -8.909608841,
-          y: -1.487652779,
-        },
-        color: "#64b5f6",
-      },
-      {
-        isGameCreator: false,
-        statistics: {
-          colaboration: true,
-          actionsDone: 10,
-          effectiveCommunication: 7,
-          taskCompletion: 4,
-          exploration: 2,
-          ineffectiveComunication: 3,
-          accompaniment: 2,
-        },
-        id: 1,
-        history: {
-          actions: [
-            { timestamp: 0, text: "Juego completado" },
-            { timestamp: 0, text: "Piedra recogida" },
-            { timestamp: 0, text: "Objetivo cumplido: Mata un caballo" },
-            {
-              timestamp: 0,
-              text: "Objetivo cumplido: Recoge carne de caballo",
-            },
-          ],
-        },
-        email: "a@a.com",
-        nickName: "omar",
-        position: {
-          x: -11.38960552,
-          y: -2.267035723,
-        },
-        color: "#9575cd",
-      },
-      {
-        isGameCreator: false,
-        statistics: {
-          colaboration: true,
-          actionsDone: 10,
-          effectiveCommunication: 7,
-          taskCompletion: 4,
-          exploration: 2,
-          ineffectiveComunication: 3,
-          accompaniment: 2,
-        },
-        id: 2,
-        history: {
-          actions: [
-            { timestamp: 0, text: "Juego completado" },
-            { timestamp: 0, text: "Piedra recogida" },
-            { timestamp: 0, text: "Objetivo cumplido: Mata un caballo" },
-            {
-              timestamp: 0,
-              text: "Objetivo cumplido: Recoge carne de caballo",
-            },
-          ],
-        },
-        email: "b@b.com",
-        nickName: "rodrigo",
-        position: {
-          x: -14.25878906,
-          y: -2.661763191,
-        },
-        color: "#81c784",
-      },
-    ],
-  },
-  {
-    timestamp: 1621890230,
-    players: [
-      {
-        isGameCreator: false,
-        statistics: {
-          colaboration: true,
-          actionsDone: 10,
-          effectiveCommunication: 7,
-          taskCompletion: 4,
-          exploration: 2,
-          ineffectiveComunication: 3,
-          accompaniment: 2,
-        },
-        id: 0,
-        history: {
-          actions: [
-            { timestamp: 0, text: "Juego completado" },
-            { timestamp: 0, text: "Piedra recogida" },
-            { timestamp: 0, text: "Objetivo cumplido: Mata un caballo" },
-            {
-              timestamp: 0,
-              text: "Objetivo cumplido: Recoge carne de caballo",
-            },
-          ],
-        },
-        email: "erick0gomez98@gmail.com",
-        nickName: "erick",
-        position: {
-          x: -19.73372269,
-          y: 2.805848122,
-        },
-        color: "#64b5f6",
-      },
-      {
-        isGameCreator: false,
-        statistics: {
-          colaboration: true,
-          actionsDone: 10,
-          effectiveCommunication: 7,
-          taskCompletion: 4,
-          exploration: 2,
-          ineffectiveComunication: 3,
-          accompaniment: 2,
-        },
-        id: 0,
-        history: {
-          actions: [
-            { timestamp: 0, text: "Juego completado" },
-            { timestamp: 0, text: "Piedra recogida" },
-            { timestamp: 0, text: "Objetivo cumplido: Mata un caballo" },
-            {
-              timestamp: 0,
-              text: "Objetivo cumplido: Recoge carne de caballo",
-            },
-          ],
-        },
-        email: "a@a.com",
-        nickName: "omar",
-        position: {
-          x: -21.00191307,
-          y: 5.18947649,
-        },
-        color: "#9575cd",
-      },
-      {
-        isGameCreator: false,
-        statistics: {
-          colaboration: true,
-          actionsDone: 10,
-          effectiveCommunication: 7,
-          taskCompletion: 4,
-          exploration: 2,
-          ineffectiveComunication: 3,
-          accompaniment: 2,
-        },
-        id: 0,
-        history: {
-          actions: [
-            { timestamp: 0, text: "Juego completado" },
-            { timestamp: 0, text: "Piedra recogida" },
-            { timestamp: 0, text: "Objetivo cumplido: Mata un caballo" },
-            {
-              timestamp: 0,
-              text: "Objetivo cumplido: Recoge carne de caballo",
-            },
-          ],
-        },
-        email: "b@b.com",
-        nickName: "rodrigo",
-        position: {
-          x: -25.33651543,
-          y: 6.775799274,
-        },
-        color: "#81c784",
-      },
-    ],
-  },
-  {
-    timestamp: 1621890231,
-    players: [
-      {
-        isGameCreator: false,
-        statistics: {
-          colaboration: true,
-          actionsDone: 10,
-          effectiveCommunication: 7,
-          taskCompletion: 4,
-          exploration: 2,
-          ineffectiveComunication: 3,
-          accompaniment: 2,
-        },
-        id: 0,
-        history: {
-          actions: [
-            { timestamp: 0, text: "Juego completado" },
-            { timestamp: 0, text: "Piedra recogida" },
-            { timestamp: 0, text: "Objetivo cumplido: Mata un caballo" },
-            {
-              timestamp: 0,
-              text: "Objetivo cumplido: Recoge carne de caballo",
-            },
-          ],
-        },
-        email: "erick0gomez98@gmail.com",
-        nickName: "erick",
-        position: {
-          x: -27.71354485,
-          y: 5.237593651,
-        },
-        color: "#64b5f6",
-      },
-      {
-        isGameCreator: false,
-        statistics: {
-          colaboration: true,
-          actionsDone: 10,
-          effectiveCommunication: 7,
-          taskCompletion: 4,
-          exploration: 2,
-          ineffectiveComunication: 3,
-          accompaniment: 2,
-        },
-        id: 0,
-        history: {
-          actions: [
-            { timestamp: 0, text: "Juego completado" },
-            { timestamp: 0, text: "Piedra recogida" },
-            { timestamp: 0, text: "Objetivo cumplido: Mata un caballo" },
-            {
-              timestamp: 0,
-              text: "Objetivo cumplido: Recoge carne de caballo",
-            },
-          ],
-        },
-        email: "a@a.com",
-        nickName: "omar",
-        position: {
-          x: -7.200773239,
-          y: 3.982229471,
-        },
-        color: "#9575cd",
-      },
-      {
-        isGameCreator: false,
-        statistics: {
-          colaboration: true,
-          actionsDone: 10,
-          effectiveCommunication: 7,
-          taskCompletion: 4,
-          exploration: 2,
-          ineffectiveComunication: 3,
-          accompaniment: 2,
-        },
-        id: 0,
-        history: {
-          actions: [
-            { timestamp: 0, text: "Juego completado" },
-            { timestamp: 0, text: "Piedra recogida" },
-            { timestamp: 0, text: "Objetivo cumplido: Mata un caballo" },
-            {
-              timestamp: 0,
-              text: "Objetivo cumplido: Recoge carne de caballo",
-            },
-          ],
-        },
-        email: "b@b.com",
-        nickName: "rodrigo",
-        position: {
-          x: -5.889999866,
-          y: 0,
-        },
-        color: "#81c784",
-      },
-    ],
-  },
-  {
-    timestamp: 1621890232,
-    players: [
-      {
-        isGameCreator: false,
-        statistics: {
-          colaboration: true,
-          actionsDone: 10,
-          effectiveCommunication: 7,
-          taskCompletion: 4,
-          exploration: 2,
-          ineffectiveComunication: 3,
-          accompaniment: 2,
-        },
-        id: 0,
-        history: {
-          actions: [
-            { timestamp: 0, text: "Juego completado" },
-            { timestamp: 0, text: "Piedra recogida" },
-            { timestamp: 0, text: "Objetivo cumplido: Mata un caballo" },
-            {
-              timestamp: 0,
-              text: "Objetivo cumplido: Recoge carne de caballo",
-            },
-          ],
-        },
-        email: "erick0gomez98@gmail.com",
-        nickName: "erick",
-        position: {
-          x: -7.481158257,
-          y: 3.197849512,
-        },
-        color: "#64b5f6",
-      },
-      {
-        isGameCreator: false,
-        statistics: {
-          colaboration: true,
-          actionsDone: 10,
-          effectiveCommunication: 7,
-          taskCompletion: 4,
-          exploration: 2,
-          ineffectiveComunication: 3,
-          accompaniment: 2,
-        },
-        id: 0,
-        history: {
-          actions: [
-            { timestamp: 0, text: "Juego completado" },
-            { timestamp: 0, text: "Piedra recogida" },
-            { timestamp: 0, text: "Objetivo cumplido: Mata un caballo" },
-            {
-              timestamp: 0,
-              text: "Objetivo cumplido: Recoge carne de caballo",
-            },
-          ],
-        },
-        email: "a@a.com",
-        nickName: "omar",
-        position: {
-          x: -11.64114475,
-          y: 4.157140732,
-        },
-        color: "#9575cd",
-      },
-      {
-        isGameCreator: false,
-        statistics: {
-          colaboration: true,
-          actionsDone: 10,
-          effectiveCommunication: 7,
-          taskCompletion: 4,
-          exploration: 2,
-          ineffectiveComunication: 3,
-          accompaniment: 2,
-        },
-        id: 0,
-        history: {
-          actions: [
-            { timestamp: 0, text: "Juego completado" },
-            { timestamp: 0, text: "Piedra recogida" },
-            { timestamp: 0, text: "Objetivo cumplido: Mata un caballo" },
-            {
-              timestamp: 0,
-              text: "Objetivo cumplido: Recoge carne de caballo",
-            },
-          ],
-        },
-        email: "b@b.com",
-        nickName: "rodrigo",
-        position: {
-          x: -8.970727921,
-          y: 5.627796173,
-        },
-        color: "#81c784",
-      },
-    ],
-  },
-  {
-    timestamp: 1621890233,
-    players: [
-      {
-        isGameCreator: false,
-        statistics: {
-          colaboration: true,
-          actionsDone: 10,
-          effectiveCommunication: 7,
-          taskCompletion: 4,
-          exploration: 2,
-          ineffectiveComunication: 3,
-          accompaniment: 2,
-        },
-        id: 0,
-        history: {
-          actions: [
-            { timestamp: 0, text: "Juego completado" },
-            { timestamp: 0, text: "Piedra recogida" },
-            { timestamp: 0, text: "Objetivo cumplido: Mata un caballo" },
-            {
-              timestamp: 0,
-              text: "Objetivo cumplido: Recoge carne de caballo",
-            },
-          ],
-        },
-        email: "erick0gomez98@gmail.com",
-        nickName: "erick",
-        position: {
-          x: -13.00753117,
-          y: 6.37967968,
-        },
-        color: "#64b5f6",
-      },
-      {
-        isGameCreator: false,
-        statistics: {
-          colaboration: true,
-          actionsDone: 10,
-          effectiveCommunication: 7,
-          taskCompletion: 4,
-          exploration: 2,
-          ineffectiveComunication: 3,
-          accompaniment: 2,
-        },
-        id: 0,
-        history: {
-          actions: [
-            { timestamp: 0, text: "Juego completado" },
-            { timestamp: 0, text: "Piedra recogida" },
-            { timestamp: 0, text: "Objetivo cumplido: Mata un caballo" },
-            {
-              timestamp: 0,
-              text: "Objetivo cumplido: Recoge carne de caballo",
-            },
-          ],
-        },
-        email: "a@a.com",
-        nickName: "omar",
-        position: {
-          x: -18.75551605,
-          y: 7.968966007,
-        },
-        color: "#9575cd",
-      },
-      {
-        isGameCreator: false,
-        statistics: {
-          colaboration: true,
-          actionsDone: 10,
-          effectiveCommunication: 7,
-          taskCompletion: 4,
-          exploration: 2,
-          ineffectiveComunication: 3,
-          accompaniment: 2,
-        },
-        id: 0,
-        history: {
-          actions: [
-            { timestamp: 0, text: "Juego completado" },
-            { timestamp: 0, text: "Piedra recogida" },
-            { timestamp: 0, text: "Objetivo cumplido: Mata un caballo" },
-            {
-              timestamp: 0,
-              text: "Objetivo cumplido: Recoge carne de caballo",
-            },
-          ],
-        },
-        email: "b@b.com",
-        nickName: "rodrigo",
-        position: {
-          x: -5.424301147,
-          y: 1.512073755,
-        },
-        color: "#81c784",
-      },
-    ],
-  },
-  {
-    timestamp: 1621890234,
-    players: [
-      {
-        isGameCreator: false,
-        statistics: {
-          colaboration: true,
-          actionsDone: 10,
-          effectiveCommunication: 7,
-          taskCompletion: 4,
-          exploration: 2,
-          ineffectiveComunication: 3,
-          accompaniment: 2,
-        },
-        id: 0,
-        history: {
-          actions: [
-            { timestamp: 0, text: "Juego completado" },
-            { timestamp: 0, text: "Piedra recogida" },
-            { timestamp: 0, text: "Objetivo cumplido: Mata un caballo" },
-            {
-              timestamp: 0,
-              text: "Objetivo cumplido: Recoge carne de caballo",
-            },
-          ],
-        },
-        email: "erick0gomez98@gmail.com",
-        nickName: "erick",
-        position: {
-          x: -9.944536209,
-          y: -2.034400702,
-        },
-        color: "#64b5f6",
-      },
-      {
-        isGameCreator: false,
-        statistics: {
-          colaboration: true,
-          actionsDone: 10,
-          effectiveCommunication: 7,
-          taskCompletion: 4,
-          exploration: 2,
-          ineffectiveComunication: 3,
-          accompaniment: 2,
-        },
-        id: 0,
-        history: {
-          actions: [
-            { timestamp: 0, text: "Juego completado" },
-            { timestamp: 0, text: "Piedra recogida" },
-            { timestamp: 0, text: "Objetivo cumplido: Mata un caballo" },
-            {
-              timestamp: 0,
-              text: "Objetivo cumplido: Recoge carne de caballo",
-            },
-          ],
-        },
-        email: "a@a.com",
-        nickName: "omar",
-        position: {
-          x: -4.741564274,
-          y: 4.006775379,
-        },
-        color: "#9575cd",
-      },
-      {
-        isGameCreator: false,
-        statistics: {
-          colaboration: true,
-          actionsDone: 10,
-          effectiveCommunication: 7,
-          taskCompletion: 4,
-          exploration: 2,
-          ineffectiveComunication: 3,
-          accompaniment: 2,
-        },
-        id: 0,
-        history: {
-          actions: [
-            { timestamp: 0, text: "Juego completado" },
-            { timestamp: 0, text: "Piedra recogida" },
-            { timestamp: 0, text: "Objetivo cumplido: Mata un caballo" },
-            {
-              timestamp: 0,
-              text: "Objetivo cumplido: Recoge carne de caballo",
-            },
-          ],
-        },
-        email: "b@b.com",
-        nickName: "rodrigo",
-        position: {
-          x: -11.32702732,
-          y: 11.53499985,
-        },
-        color: "#81c784",
-      },
-    ],
-  },
-  {
-    timestamp: 1621890235,
-    players: [
-      {
-        isGameCreator: false,
-        statistics: {
-          colaboration: true,
-          actionsDone: 10,
-          effectiveCommunication: 7,
-          taskCompletion: 4,
-          exploration: 2,
-          ineffectiveComunication: 3,
-          accompaniment: 2,
-        },
-        id: 0,
-        history: {
-          actions: [
-            { timestamp: 0, text: "Juego completado" },
-            { timestamp: 0, text: "Piedra recogida" },
-            { timestamp: 0, text: "Objetivo cumplido: Mata un caballo" },
-            {
-              timestamp: 0,
-              text: "Objetivo cumplido: Recoge carne de caballo",
-            },
-          ],
-        },
-        email: "erick0gomez98@gmail.com",
-        nickName: "erick",
-        position: {
-          x: -16.57142258,
-          y: 14.3202467,
-        },
-        color: "#64b5f6",
-      },
-      {
-        isGameCreator: false,
-        statistics: {
-          colaboration: true,
-          actionsDone: 10,
-          effectiveCommunication: 7,
-          taskCompletion: 4,
-          exploration: 2,
-          ineffectiveComunication: 3,
-          accompaniment: 2,
-        },
-        id: 0,
-        history: {
-          actions: [
-            { timestamp: 0, text: "Juego completado" },
-            { timestamp: 0, text: "Piedra recogida" },
-            { timestamp: 0, text: "Objetivo cumplido: Mata un caballo" },
-            {
-              timestamp: 0,
-              text: "Objetivo cumplido: Recoge carne de caballo",
-            },
-          ],
-        },
-        email: "a@a.com",
-        nickName: "omar",
-        position: {
-          x: -17.43433762,
-          y: 15.54532051,
-        },
-        color: "#9575cd",
-      },
-      {
-        isGameCreator: false,
-        statistics: {
-          colaboration: true,
-          actionsDone: 10,
-          effectiveCommunication: 7,
-          taskCompletion: 4,
-          exploration: 2,
-          ineffectiveComunication: 3,
-          accompaniment: 2,
-        },
-        id: 0,
-        history: {
-          actions: [
-            { timestamp: 0, text: "Juego completado" },
-            { timestamp: 0, text: "Piedra recogida" },
-            { timestamp: 0, text: "Objetivo cumplido: Mata un caballo" },
-            {
-              timestamp: 0,
-              text: "Objetivo cumplido: Recoge carne de caballo",
-            },
-          ],
-        },
-        email: "b@b.com",
-        nickName: "rodrigo",
-        position: {
-          x: -22.15458679,
-          y: 21.44928551,
-        },
-        color: "#81c784",
-      },
-    ],
-  },
-  {
-    timestamp: 1621890236,
-    players: [
-      {
-        isGameCreator: false,
-        statistics: {
-          colaboration: true,
-          actionsDone: 10,
-          effectiveCommunication: 7,
-          taskCompletion: 4,
-          exploration: 2,
-          ineffectiveComunication: 3,
-          accompaniment: 2,
-        },
-        id: 0,
-        history: {
-          actions: [
-            { timestamp: 0, text: "Juego completado" },
-            { timestamp: 0, text: "Piedra recogida" },
-            { timestamp: 0, text: "Objetivo cumplido: Mata un caballo" },
-            {
-              timestamp: 0,
-              text: "Objetivo cumplido: Recoge carne de caballo",
-            },
-          ],
-        },
-        email: "erick0gomez98@gmail.com",
-        nickName: "erick",
-        position: {
-          x: -3.469911814,
-          y: 6.348711967,
-        },
-        color: "#64b5f6",
-      },
-      {
-        isGameCreator: false,
-        statistics: {
-          colaboration: true,
-          actionsDone: 10,
-          effectiveCommunication: 7,
-          taskCompletion: 4,
-          exploration: 2,
-          ineffectiveComunication: 3,
-          accompaniment: 2,
-        },
-        id: 0,
-        history: {
-          actions: [
-            { timestamp: 0, text: "Juego completado" },
-            { timestamp: 0, text: "Piedra recogida" },
-            { timestamp: 0, text: "Objetivo cumplido: Mata un caballo" },
-            {
-              timestamp: 0,
-              text: "Objetivo cumplido: Recoge carne de caballo",
-            },
-          ],
-        },
-        email: "a@a.com",
-        nickName: "omar",
-        position: {
-          x: -7.051377296,
-          y: 7.783280849,
-        },
-        color: "#9575cd",
-      },
-      {
-        isGameCreator: false,
-        statistics: {
-          colaboration: true,
-          actionsDone: 10,
-          effectiveCommunication: 7,
-          taskCompletion: 4,
-          exploration: 2,
-          ineffectiveComunication: 3,
-          accompaniment: 2,
-        },
-        id: 0,
-        history: {
-          actions: [
-            { timestamp: 0, text: "Juego completado" },
-            { timestamp: 0, text: "Piedra recogida" },
-            { timestamp: 0, text: "Objetivo cumplido: Mata un caballo" },
-            {
-              timestamp: 0,
-              text: "Objetivo cumplido: Recoge carne de caballo",
-            },
-          ],
-        },
-        email: "b@b.com",
-        nickName: "rodrigo",
-        position: {
-          x: -9.112953186,
-          y: 7.276476383,
-        },
-        color: "#81c784",
-      },
-    ],
-  },
-  {
-    timestamp: 1621890237,
-    players: [
-      {
-        isGameCreator: false,
-        statistics: {
-          colaboration: true,
-          actionsDone: 10,
-          effectiveCommunication: 7,
-          taskCompletion: 4,
-          exploration: 2,
-          ineffectiveComunication: 3,
-          accompaniment: 2,
-        },
-        id: 0,
-        history: {
-          actions: [
-            { timestamp: 0, text: "Juego completado" },
-            { timestamp: 0, text: "Piedra recogida" },
-            { timestamp: 0, text: "Objetivo cumplido: Mata un caballo" },
-            {
-              timestamp: 0,
-              text: "Objetivo cumplido: Recoge carne de caballo",
-            },
-          ],
-        },
-        email: "erick0gomez98@gmail.com",
-        nickName: "erick",
-        position: {
-          x: -3.469911814,
-          y: 6.348711967,
-        },
-        color: "#64b5f6",
-      },
-      {
-        isGameCreator: false,
-        statistics: {
-          colaboration: true,
-          actionsDone: 10,
-          effectiveCommunication: 7,
-          taskCompletion: 4,
-          exploration: 2,
-          ineffectiveComunication: 3,
-          accompaniment: 2,
-        },
-        id: 0,
-        history: {
-          actions: [
-            { timestamp: 0, text: "Juego completado" },
-            { timestamp: 0, text: "Piedra recogida" },
-            { timestamp: 0, text: "Objetivo cumplido: Mata un caballo" },
-            {
-              timestamp: 0,
-              text: "Objetivo cumplido: Recoge carne de caballo",
-            },
-          ],
-        },
-        email: "a@a.com",
-        nickName: "omar",
-        position: {
-          x: -7.051377296,
-          y: 7.783280849,
-        },
-        color: "#9575cd",
-      },
-      {
-        isGameCreator: false,
-        statistics: {
-          colaboration: true,
-          actionsDone: 10,
-          effectiveCommunication: 7,
-          taskCompletion: 4,
-          exploration: 2,
-          ineffectiveComunication: 3,
-          accompaniment: 2,
-        },
-        id: 0,
-        history: {
-          actions: [
-            { timestamp: 0, text: "Juego completado" },
-            { timestamp: 0, text: "Piedra recogida" },
-            { timestamp: 0, text: "Objetivo cumplido: Mata un caballo" },
-            {
-              timestamp: 0,
-              text: "Objetivo cumplido: Recoge carne de caballo",
-            },
-          ],
-        },
-        email: "b@b.com",
-        nickName: "rodrigo",
-        position: {
-          x: -9.112953186,
-          y: 7.276476383,
-        },
-        color: "#81c784",
-      },
-    ],
-  },
-  {
-    timestamp: 1621890238,
-    players: [
-      {
-        isGameCreator: false,
-        statistics: {
-          colaboration: true,
-          actionsDone: 10,
-          effectiveCommunication: 7,
-          taskCompletion: 4,
-          exploration: 2,
-          ineffectiveComunication: 3,
-          accompaniment: 2,
-        },
-        id: 0,
-        history: {
-          actions: [
-            { timestamp: 0, text: "Juego completado" },
-            { timestamp: 0, text: "Piedra recogida" },
-            { timestamp: 0, text: "Objetivo cumplido: Mata un caballo" },
-            {
-              timestamp: 0,
-              text: "Objetivo cumplido: Recoge carne de caballo",
-            },
-          ],
-        },
-        email: "erick0gomez98@gmail.com",
-        nickName: "erick",
-        position: {
-          x: -3.469911814,
-          y: 6.348711967,
-        },
-        color: "#64b5f6",
-      },
-      {
-        isGameCreator: false,
-        statistics: {
-          colaboration: true,
-          actionsDone: 10,
-          effectiveCommunication: 7,
-          taskCompletion: 4,
-          exploration: 2,
-          ineffectiveComunication: 3,
-          accompaniment: 2,
-        },
-        id: 0,
-        history: {
-          actions: [
-            { timestamp: 0, text: "Juego completado" },
-            { timestamp: 0, text: "Piedra recogida" },
-            { timestamp: 0, text: "Objetivo cumplido: Mata un caballo" },
-            {
-              timestamp: 0,
-              text: "Objetivo cumplido: Recoge carne de caballo",
-            },
-          ],
-        },
-        email: "a@a.com",
-        nickName: "omar",
-        position: {
-          x: -7.051377296,
-          y: 7.783280849,
-        },
-        color: "#9575cd",
-      },
-      {
-        isGameCreator: false,
-        statistics: {
-          colaboration: true,
-          actionsDone: 10,
-          effectiveCommunication: 7,
-          taskCompletion: 4,
-          exploration: 2,
-          ineffectiveComunication: 3,
-          accompaniment: 2,
-        },
-        id: 0,
-        history: {
-          actions: [
-            { timestamp: 0, text: "Juego completado" },
-            { timestamp: 0, text: "Piedra recogida" },
-            { timestamp: 0, text: "Objetivo cumplido: Mata un caballo" },
-            {
-              timestamp: 0,
-              text: "Objetivo cumplido: Recoge carne de caballo",
-            },
-          ],
-        },
-        email: "b@b.com",
-        nickName: "rodrigo",
-        position: {
-          x: -9.112953186,
-          y: 7.276476383,
-        },
-        color: "#81c784",
-      },
-    ],
-  },
-  {
-    timestamp: 1621890239,
-    players: [
-      {
-        isGameCreator: false,
-        statistics: {
-          colaboration: true,
-          actionsDone: 10,
-          effectiveCommunication: 7,
-          taskCompletion: 4,
-          exploration: 2,
-          ineffectiveComunication: 3,
-          accompaniment: 2,
-        },
-        id: 0,
-        history: {
-          actions: [
-            { timestamp: 0, text: "Juego completado" },
-            { timestamp: 0, text: "Piedra recogida" },
-            { timestamp: 0, text: "Objetivo cumplido: Mata un caballo" },
-            {
-              timestamp: 0,
-              text: "Objetivo cumplido: Recoge carne de caballo",
-            },
-          ],
-        },
-        email: "erick0gomez98@gmail.com",
-        nickName: "erick",
-        position: {
-          x: -3.469911814,
-          y: 6.348711967,
-        },
-        color: "#64b5f6",
-      },
-      {
-        isGameCreator: false,
-        statistics: {
-          colaboration: true,
-          actionsDone: 10,
-          effectiveCommunication: 7,
-          taskCompletion: 4,
-          exploration: 2,
-          ineffectiveComunication: 3,
-          accompaniment: 2,
-        },
-        id: 0,
-        history: {
-          actions: [
-            { timestamp: 0, text: "Juego completado" },
-            { timestamp: 0, text: "Piedra recogida" },
-            { timestamp: 0, text: "Objetivo cumplido: Mata un caballo" },
-            {
-              timestamp: 0,
-              text: "Objetivo cumplido: Recoge carne de caballo",
-            },
-          ],
-        },
-        email: "a@a.com",
-        nickName: "omar",
-        position: {
-          x: -7.051377296,
-          y: 7.783280849,
-        },
-        color: "#9575cd",
-      },
-      {
-        isGameCreator: false,
-        statistics: {
-          colaboration: true,
-          actionsDone: 10,
-          effectiveCommunication: 7,
-          taskCompletion: 4,
-          exploration: 2,
-          ineffectiveComunication: 3,
-          accompaniment: 2,
-        },
-        id: 0,
-        history: {
-          actions: [
-            { timestamp: 0, text: "Juego completado" },
-            { timestamp: 0, text: "Piedra recogida" },
-            { timestamp: 0, text: "Objetivo cumplido: Mata un caballo" },
-            {
-              timestamp: 0,
-              text: "Objetivo cumplido: Recoge carne de caballo",
-            },
-          ],
-        },
-        email: "b@b.com",
-        nickName: "rodrigo",
-        position: {
-          x: -9.112953186,
-          y: 7.276476383,
-        },
-        color: "#81c784",
-      },
-    ],
-  },
-  {
-    timestamp: 1621890240,
-    players: [
-      {
-        isGameCreator: false,
-        statistics: {
-          colaboration: true,
-          actionsDone: 10,
-          effectiveCommunication: 7,
-          taskCompletion: 4,
-          exploration: 2,
-          ineffectiveComunication: 3,
-          accompaniment: 2,
-        },
-        id: 0,
-        history: {
-          actions: [
-            { timestamp: 0, text: "Juego completado" },
-            { timestamp: 0, text: "Piedra recogida" },
-            { timestamp: 0, text: "Objetivo cumplido: Mata un caballo" },
-            {
-              timestamp: 0,
-              text: "Objetivo cumplido: Recoge carne de caballo",
-            },
-          ],
-        },
-        email: "erick0gomez98@gmail.com",
-        nickName: "erick",
-        position: {
-          x: -3.469911814,
-          y: 6.348711967,
-        },
-        color: "#64b5f6",
-      },
-      {
-        isGameCreator: false,
-        statistics: {
-          colaboration: true,
-          actionsDone: 10,
-          effectiveCommunication: 7,
-          taskCompletion: 4,
-          exploration: 2,
-          ineffectiveComunication: 3,
-          accompaniment: 2,
-        },
-        id: 0,
-        history: {
-          actions: [
-            { timestamp: 0, text: "Juego completado" },
-            { timestamp: 0, text: "Piedra recogida" },
-            { timestamp: 0, text: "Objetivo cumplido: Mata un caballo" },
-            {
-              timestamp: 0,
-              text: "Objetivo cumplido: Recoge carne de caballo",
-            },
-          ],
-        },
-        email: "a@a.com",
-        nickName: "omar",
-        position: {
-          x: -7.051377296,
-          y: 7.783280849,
-        },
-        color: "#9575cd",
-      },
-      {
-        isGameCreator: false,
-        statistics: {
-          colaboration: true,
-          actionsDone: 10,
-          effectiveCommunication: 7,
-          taskCompletion: 4,
-          exploration: 2,
-          ineffectiveComunication: 3,
-          accompaniment: 2,
-        },
-        id: 0,
-        history: {
-          actions: [
-            { timestamp: 0, text: "Juego completado" },
-            { timestamp: 0, text: "Piedra recogida" },
-            { timestamp: 0, text: "Objetivo cumplido: Mata un caballo" },
-            {
-              timestamp: 0,
-              text: "Objetivo cumplido: Recoge carne de caballo",
-            },
-          ],
-        },
-        email: "b@b.com",
-        nickName: "rodrigo",
-        position: {
-          x: -9.112953186,
-          y: 7.276476383,
-        },
-        color: "#81c784",
-      },
-    ],
-  },
-  {
-    timestamp: 1621890241,
-    players: [
-      {
-        isGameCreator: false,
-        statistics: {
-          colaboration: true,
-          actionsDone: 10,
-          effectiveCommunication: 7,
-          taskCompletion: 4,
-          exploration: 2,
-          ineffectiveComunication: 3,
-          accompaniment: 2,
-        },
-        id: 0,
-        history: {
-          actions: [
-            { timestamp: 0, text: "Juego completado" },
-            { timestamp: 0, text: "Piedra recogida" },
-            { timestamp: 0, text: "Objetivo cumplido: Mata un caballo" },
-            {
-              timestamp: 0,
-              text: "Objetivo cumplido: Recoge carne de caballo",
-            },
-          ],
-        },
-        email: "erick0gomez98@gmail.com",
-        nickName: "erick",
-        position: {
-          x: -3.469911814,
-          y: 6.348711967,
-        },
-        color: "#64b5f6",
-      },
-      {
-        isGameCreator: false,
-        statistics: {
-          colaboration: true,
-          actionsDone: 10,
-          effectiveCommunication: 7,
-          taskCompletion: 4,
-          exploration: 2,
-          ineffectiveComunication: 3,
-          accompaniment: 2,
-        },
-        id: 0,
-        history: {
-          actions: [
-            { timestamp: 0, text: "Juego completado" },
-            { timestamp: 0, text: "Piedra recogida" },
-            { timestamp: 0, text: "Objetivo cumplido: Mata un caballo" },
-            {
-              timestamp: 0,
-              text: "Objetivo cumplido: Recoge carne de caballo",
-            },
-          ],
-        },
-        email: "a@a.com",
-        nickName: "omar",
-        position: {
-          x: -7.051377296,
-          y: 7.783280849,
-        },
-        color: "#9575cd",
-      },
-      {
-        isGameCreator: false,
-        statistics: {
-          colaboration: true,
-          actionsDone: 10,
-          effectiveCommunication: 7,
-          taskCompletion: 4,
-          exploration: 2,
-          ineffectiveComunication: 3,
-          accompaniment: 2,
-        },
-        id: 0,
-        history: {
-          actions: [
-            { timestamp: 0, text: "Juego completado" },
-            { timestamp: 0, text: "Piedra recogida" },
-            { timestamp: 0, text: "Objetivo cumplido: Mata un caballo" },
-            {
-              timestamp: 0,
-              text: "Objetivo cumplido: Recoge carne de caballo",
-            },
-          ],
-        },
-        email: "b@b.com",
-        nickName: "rodrigo",
-        position: {
-          x: -9.112953186,
-          y: 7.276476383,
-        },
-        color: "#81c784",
-      },
-    ],
-  },
-  {
-    timestamp: 1621890242,
-    players: [
-      {
-        isGameCreator: false,
-        statistics: {
-          colaboration: true,
-          actionsDone: 10,
-          effectiveCommunication: 7,
-          taskCompletion: 4,
-          exploration: 2,
-          ineffectiveComunication: 3,
-          accompaniment: 2,
-        },
-        id: 0,
-        history: {
-          actions: [
-            { timestamp: 0, text: "Juego completado" },
-            { timestamp: 0, text: "Piedra recogida" },
-            { timestamp: 0, text: "Objetivo cumplido: Mata un caballo" },
-            {
-              timestamp: 0,
-              text: "Objetivo cumplido: Recoge carne de caballo",
-            },
-          ],
-        },
-        email: "erick0gomez98@gmail.com",
-        nickName: "erick",
-        position: {
-          x: -3.469911814,
-          y: 6.348711967,
-        },
-        color: "#64b5f6",
-      },
-      {
-        isGameCreator: false,
-        statistics: {
-          colaboration: true,
-          actionsDone: 10,
-          effectiveCommunication: 7,
-          taskCompletion: 4,
-          exploration: 2,
-          ineffectiveComunication: 3,
-          accompaniment: 2,
-        },
-        id: 0,
-        history: {
-          actions: [
-            { timestamp: 0, text: "Juego completado" },
-            { timestamp: 0, text: "Piedra recogida" },
-            { timestamp: 0, text: "Objetivo cumplido: Mata un caballo" },
-            {
-              timestamp: 0,
-              text: "Objetivo cumplido: Recoge carne de caballo",
-            },
-          ],
-        },
-        email: "a@a.com",
-        nickName: "omar",
-        position: {
-          x: -7.051377296,
-          y: 7.783280849,
-        },
-        color: "#9575cd",
-      },
-      {
-        isGameCreator: false,
-        statistics: {
-          colaboration: true,
-          actionsDone: 10,
-          effectiveCommunication: 7,
-          taskCompletion: 4,
-          exploration: 2,
-          ineffectiveComunication: 3,
-          accompaniment: 2,
-        },
-        id: 0,
-        history: {
-          actions: [
-            { timestamp: 0, text: "Juego completado" },
-            { timestamp: 0, text: "Piedra recogida" },
-            { timestamp: 0, text: "Objetivo cumplido: Mata un caballo" },
-            {
-              timestamp: 0,
-              text: "Objetivo cumplido: Recoge carne de caballo",
-            },
-          ],
-        },
-        email: "b@b.com",
-        nickName: "rodrigo",
-        position: {
-          x: -9.112953186,
-          y: 7.276476383,
-        },
-        color: "#81c784",
-      },
-    ],
-  },
-  {
-    timestamp: 1621890243,
-    players: [
-      {
-        isGameCreator: false,
-        statistics: {
-          colaboration: true,
-          actionsDone: 10,
-          effectiveCommunication: 7,
-          taskCompletion: 4,
-          exploration: 2,
-          ineffectiveComunication: 3,
-          accompaniment: 2,
-        },
-        id: 0,
-        history: {
-          actions: [
-            { timestamp: 0, text: "Juego completado" },
-            { timestamp: 0, text: "Piedra recogida" },
-            { timestamp: 0, text: "Objetivo cumplido: Mata un caballo" },
-            {
-              timestamp: 0,
-              text: "Objetivo cumplido: Recoge carne de caballo",
-            },
-          ],
-        },
-        email: "erick0gomez98@gmail.com",
-        nickName: "erick",
-        position: {
-          x: -3.469911814,
-          y: 6.348711967,
-        },
-        color: "#64b5f6",
-      },
-      {
-        isGameCreator: false,
-        statistics: {
-          colaboration: true,
-          actionsDone: 10,
-          effectiveCommunication: 7,
-          taskCompletion: 4,
-          exploration: 2,
-          ineffectiveComunication: 3,
-          accompaniment: 2,
-        },
-        id: 0,
-        history: {
-          actions: [
-            { timestamp: 0, text: "Juego completado" },
-            { timestamp: 0, text: "Piedra recogida" },
-            { timestamp: 0, text: "Objetivo cumplido: Mata un caballo" },
-            {
-              timestamp: 0,
-              text: "Objetivo cumplido: Recoge carne de caballo",
-            },
-          ],
-        },
-        email: "a@a.com",
-        nickName: "omar",
-        position: {
-          x: -7.051377296,
-          y: 7.783280849,
-        },
-        color: "#9575cd",
-      },
-      {
-        isGameCreator: false,
-        statistics: {
-          colaboration: true,
-          actionsDone: 10,
-          effectiveCommunication: 7,
-          taskCompletion: 4,
-          exploration: 2,
-          ineffectiveComunication: 3,
-          accompaniment: 2,
-        },
-        id: 0,
-        history: {
-          actions: [
-            { timestamp: 0, text: "Juego completado" },
-            { timestamp: 0, text: "Piedra recogida" },
-            { timestamp: 0, text: "Objetivo cumplido: Mata un caballo" },
-            {
-              timestamp: 0,
-              text: "Objetivo cumplido: Recoge carne de caballo",
-            },
-          ],
-        },
-        email: "b@b.com",
-        nickName: "rodrigo",
-        position: {
-          x: -9.112953186,
-          y: 7.276476383,
-        },
-        color: "#81c784",
-      },
-    ],
-  },
-  {
-    timestamp: 1621890244,
-    players: [
-      {
-        isGameCreator: false,
-        statistics: {
-          colaboration: true,
-          actionsDone: 10,
-          effectiveCommunication: 7,
-          taskCompletion: 4,
-          exploration: 2,
-          ineffectiveComunication: 3,
-          accompaniment: 2,
-        },
-        id: 0,
-        history: {
-          actions: [
-            { timestamp: 0, text: "Juego completado" },
-            { timestamp: 0, text: "Piedra recogida" },
-            { timestamp: 0, text: "Objetivo cumplido: Mata un caballo" },
-            {
-              timestamp: 0,
-              text: "Objetivo cumplido: Recoge carne de caballo",
-            },
-          ],
-        },
-        email: "erick0gomez98@gmail.com",
-        nickName: "erick",
-        position: {
-          x: -3.469911814,
-          y: 6.348711967,
-        },
-        color: "#64b5f6",
-      },
-      {
-        isGameCreator: false,
-        statistics: {
-          colaboration: true,
-          actionsDone: 10,
-          effectiveCommunication: 7,
-          taskCompletion: 4,
-          exploration: 2,
-          ineffectiveComunication: 3,
-          accompaniment: 2,
-        },
-        id: 0,
-        history: {
-          actions: [
-            { timestamp: 0, text: "Juego completado" },
-            { timestamp: 0, text: "Piedra recogida" },
-            { timestamp: 0, text: "Objetivo cumplido: Mata un caballo" },
-            {
-              timestamp: 0,
-              text: "Objetivo cumplido: Recoge carne de caballo",
-            },
-          ],
-        },
-        email: "a@a.com",
-        nickName: "omar",
-        position: {
-          x: -7.051377296,
-          y: 7.783280849,
-        },
-        color: "#9575cd",
-      },
-      {
-        isGameCreator: false,
-        statistics: {
-          colaboration: true,
-          actionsDone: 10,
-          effectiveCommunication: 7,
-          taskCompletion: 4,
-          exploration: 2,
-          ineffectiveComunication: 3,
-          accompaniment: 2,
-        },
-        id: 0,
-        history: {
-          actions: [
-            { timestamp: 0, text: "Juego completado" },
-            { timestamp: 0, text: "Piedra recogida" },
-            { timestamp: 0, text: "Objetivo cumplido: Mata un caballo" },
-            {
-              timestamp: 0,
-              text: "Objetivo cumplido: Recoge carne de caballo",
-            },
-          ],
-        },
-        email: "b@b.com",
-        nickName: "rodrigo",
-        position: {
-          x: -9.112953186,
-          y: 7.276476383,
-        },
-        color: "#81c784",
-      },
-    ],
-  },
-  {
-    timestamp: 1621890245,
-    players: [
-      {
-        isGameCreator: false,
-        statistics: {
-          colaboration: true,
-          actionsDone: 10,
-          effectiveCommunication: 7,
-          taskCompletion: 4,
-          exploration: 2,
-          ineffectiveComunication: 3,
-          accompaniment: 2,
-        },
-        id: 0,
-        history: {
-          actions: [
-            { timestamp: 0, text: "Juego completado" },
-            { timestamp: 0, text: "Piedra recogida" },
-            { timestamp: 0, text: "Objetivo cumplido: Mata un caballo" },
-            {
-              timestamp: 0,
-              text: "Objetivo cumplido: Recoge carne de caballo",
-            },
-          ],
-        },
-        email: "erick0gomez98@gmail.com",
-        nickName: "erick",
-        position: {
-          x: -3.469911814,
-          y: 6.348711967,
-        },
-        color: "#64b5f6",
-      },
-      {
-        isGameCreator: false,
-        statistics: {
-          colaboration: true,
-          actionsDone: 10,
-          effectiveCommunication: 7,
-          taskCompletion: 4,
-          exploration: 2,
-          ineffectiveComunication: 3,
-          accompaniment: 2,
-        },
-        id: 0,
-        history: {
-          actions: [
-            { timestamp: 0, text: "Juego completado" },
-            { timestamp: 0, text: "Piedra recogida" },
-            { timestamp: 0, text: "Objetivo cumplido: Mata un caballo" },
-            {
-              timestamp: 0,
-              text: "Objetivo cumplido: Recoge carne de caballo",
-            },
-          ],
-        },
-        email: "a@a.com",
-        nickName: "omar",
-        position: {
-          x: -7.051377296,
-          y: 7.783280849,
-        },
-        color: "#9575cd",
-      },
-      {
-        isGameCreator: false,
-        statistics: {
-          colaboration: true,
-          actionsDone: 10,
-          effectiveCommunication: 7,
-          taskCompletion: 4,
-          exploration: 2,
-          ineffectiveComunication: 3,
-          accompaniment: 2,
-        },
-        id: 0,
-        history: {
-          actions: [
-            { timestamp: 0, text: "Juego completado" },
-            { timestamp: 0, text: "Piedra recogida" },
-            { timestamp: 0, text: "Objetivo cumplido: Mata un caballo" },
-            {
-              timestamp: 0,
-              text: "Objetivo cumplido: Recoge carne de caballo",
-            },
-          ],
-        },
-        email: "b@b.com",
-        nickName: "rodrigo",
-        position: {
-          x: -9.112953186,
-          y: 7.276476383,
-        },
-        color: "#81c784",
-      },
-    ],
-  },
-  {
-    timestamp: 1621890246,
-    players: [
-      {
-        isGameCreator: false,
-        statistics: {
-          colaboration: true,
-          actionsDone: 10,
-          effectiveCommunication: 7,
-          taskCompletion: 4,
-          exploration: 2,
-          ineffectiveComunication: 3,
-          accompaniment: 2,
-        },
-        id: 0,
-        history: {
-          actions: [
-            { timestamp: 0, text: "Juego completado" },
-            { timestamp: 0, text: "Piedra recogida" },
-            { timestamp: 0, text: "Objetivo cumplido: Mata un caballo" },
-            {
-              timestamp: 0,
-              text: "Objetivo cumplido: Recoge carne de caballo",
-            },
-          ],
-        },
-        email: "erick0gomez98@gmail.com",
-        nickName: "erick",
-        position: {
-          x: -3.469911814,
-          y: 6.348711967,
-        },
-        color: "#64b5f6",
-      },
-      {
-        isGameCreator: false,
-        statistics: {
-          colaboration: true,
-          actionsDone: 10,
-          effectiveCommunication: 7,
-          taskCompletion: 4,
-          exploration: 2,
-          ineffectiveComunication: 3,
-          accompaniment: 2,
-        },
-        id: 0,
-        history: {
-          actions: [
-            { timestamp: 0, text: "Juego completado" },
-            { timestamp: 0, text: "Piedra recogida" },
-            { timestamp: 0, text: "Objetivo cumplido: Mata un caballo" },
-            {
-              timestamp: 0,
-              text: "Objetivo cumplido: Recoge carne de caballo",
-            },
-          ],
-        },
-        email: "a@a.com",
-        nickName: "omar",
-        position: {
-          x: -7.051377296,
-          y: 7.783280849,
-        },
-        color: "#9575cd",
-      },
-      {
-        isGameCreator: false,
-        statistics: {
-          colaboration: true,
-          actionsDone: 10,
-          effectiveCommunication: 7,
-          taskCompletion: 4,
-          exploration: 2,
-          ineffectiveComunication: 3,
-          accompaniment: 2,
-        },
-        id: 0,
-        history: {
-          actions: [
-            { timestamp: 0, text: "Juego completado" },
-            { timestamp: 0, text: "Piedra recogida" },
-            { timestamp: 0, text: "Objetivo cumplido: Mata un caballo" },
-            {
-              timestamp: 0,
-              text: "Objetivo cumplido: Recoge carne de caballo",
-            },
-          ],
-        },
-        email: "b@b.com",
-        nickName: "rodrigo",
-        position: {
-          x: -9.112953186,
-          y: 7.276476383,
-        },
-        color: "#81c784",
-      },
-    ],
-  },
-  {
-    timestamp: 1621890247,
-    players: [
-      {
-        isGameCreator: false,
-        statistics: {
-          colaboration: true,
-          actionsDone: 10,
-          effectiveCommunication: 7,
-          taskCompletion: 4,
-          exploration: 2,
-          ineffectiveComunication: 3,
-          accompaniment: 2,
-        },
-        id: 0,
-        history: {
-          actions: [
-            { timestamp: 0, text: "Juego completado" },
-            { timestamp: 0, text: "Piedra recogida" },
-            { timestamp: 0, text: "Objetivo cumplido: Mata un caballo" },
-            {
-              timestamp: 0,
-              text: "Objetivo cumplido: Recoge carne de caballo",
-            },
-          ],
-        },
-        email: "erick0gomez98@gmail.com",
-        nickName: "erick",
-        position: {
-          x: -3.469911814,
-          y: 6.348711967,
-        },
-        color: "#64b5f6",
-      },
-      {
-        isGameCreator: false,
-        statistics: {
-          colaboration: true,
-          actionsDone: 10,
-          effectiveCommunication: 7,
-          taskCompletion: 4,
-          exploration: 2,
-          ineffectiveComunication: 3,
-          accompaniment: 2,
-        },
-        id: 0,
-        history: {
-          actions: [
-            { timestamp: 0, text: "Juego completado" },
-            { timestamp: 0, text: "Piedra recogida" },
-            { timestamp: 0, text: "Objetivo cumplido: Mata un caballo" },
-            {
-              timestamp: 0,
-              text: "Objetivo cumplido: Recoge carne de caballo",
-            },
-          ],
-        },
-        email: "a@a.com",
-        nickName: "omar",
-        position: {
-          x: -7.051377296,
-          y: 7.783280849,
-        },
-        color: "#9575cd",
-      },
-      {
-        isGameCreator: false,
-        statistics: {
-          colaboration: true,
-          actionsDone: 10,
-          effectiveCommunication: 7,
-          taskCompletion: 4,
-          exploration: 2,
-          ineffectiveComunication: 3,
-          accompaniment: 2,
-        },
-        id: 0,
-        history: {
-          actions: [
-            { timestamp: 0, text: "Juego completado" },
-            { timestamp: 0, text: "Piedra recogida" },
-            { timestamp: 0, text: "Objetivo cumplido: Mata un caballo" },
-            {
-              timestamp: 0,
-              text: "Objetivo cumplido: Recoge carne de caballo",
-            },
-          ],
-        },
-        email: "b@b.com",
-        nickName: "rodrigo",
-        position: {
-          x: -9.112953186,
-          y: 7.276476383,
-        },
-        color: "#81c784",
-      },
-    ],
-  },
-  {
-    timestamp: 1621890248,
-    players: [
-      {
-        isGameCreator: false,
-        statistics: {
-          colaboration: true,
-          actionsDone: 10,
-          effectiveCommunication: 7,
-          taskCompletion: 4,
-          exploration: 2,
-          ineffectiveComunication: 3,
-          accompaniment: 2,
-        },
-        id: 0,
-        history: {
-          actions: [
-            { timestamp: 0, text: "Juego completado" },
-            { timestamp: 0, text: "Piedra recogida" },
-            { timestamp: 0, text: "Objetivo cumplido: Mata un caballo" },
-            {
-              timestamp: 0,
-              text: "Objetivo cumplido: Recoge carne de caballo",
-            },
-          ],
-        },
-        email: "erick0gomez98@gmail.com",
-        nickName: "erick",
-        position: {
-          x: -3.469911814,
-          y: 6.348711967,
-        },
-        color: "#64b5f6",
-      },
-      {
-        isGameCreator: false,
-        statistics: {
-          colaboration: true,
-          actionsDone: 10,
-          effectiveCommunication: 7,
-          taskCompletion: 4,
-          exploration: 2,
-          ineffectiveComunication: 3,
-          accompaniment: 2,
-        },
-        id: 0,
-        history: {
-          actions: [
-            { timestamp: 0, text: "Juego completado" },
-            { timestamp: 0, text: "Piedra recogida" },
-            { timestamp: 0, text: "Objetivo cumplido: Mata un caballo" },
-            {
-              timestamp: 0,
-              text: "Objetivo cumplido: Recoge carne de caballo",
-            },
-          ],
-        },
-        email: "a@a.com",
-        nickName: "omar",
-        position: {
-          x: -7.051377296,
-          y: 7.783280849,
-        },
-        color: "#9575cd",
-      },
-      {
-        isGameCreator: false,
-        statistics: {
-          colaboration: true,
-          actionsDone: 10,
-          effectiveCommunication: 7,
-          taskCompletion: 4,
-          exploration: 2,
-          ineffectiveComunication: 3,
-          accompaniment: 2,
-        },
-        id: 0,
-        history: {
-          actions: [
-            { timestamp: 0, text: "Juego completado" },
-            { timestamp: 0, text: "Piedra recogida" },
-            { timestamp: 0, text: "Objetivo cumplido: Mata un caballo" },
-            {
-              timestamp: 0,
-              text: "Objetivo cumplido: Recoge carne de caballo",
-            },
-          ],
-        },
-        email: "b@b.com",
-        nickName: "rodrigo",
-        position: {
-          x: -9.112953186,
-          y: 7.276476383,
-        },
-        color: "#81c784",
-      },
-    ],
-  },
-  {
-    timestamp: 1621890249,
-    players: [
-      {
-        isGameCreator: false,
-        statistics: {
-          colaboration: true,
-          actionsDone: 10,
-          effectiveCommunication: 7,
-          taskCompletion: 4,
-          exploration: 2,
-          ineffectiveComunication: 3,
-          accompaniment: 2,
-        },
-        id: 0,
-        history: {
-          actions: [
-            { timestamp: 0, text: "Juego completado" },
-            { timestamp: 0, text: "Piedra recogida" },
-            { timestamp: 0, text: "Objetivo cumplido: Mata un caballo" },
-            {
-              timestamp: 0,
-              text: "Objetivo cumplido: Recoge carne de caballo",
-            },
-          ],
-        },
-        email: "erick0gomez98@gmail.com",
-        nickName: "erick",
-        position: {
-          x: -3.469911814,
-          y: 6.348711967,
-        },
-        color: "#64b5f6",
-      },
-      {
-        isGameCreator: false,
-        statistics: {
-          colaboration: true,
-          actionsDone: 10,
-          effectiveCommunication: 7,
-          taskCompletion: 4,
-          exploration: 2,
-          ineffectiveComunication: 3,
-          accompaniment: 2,
-        },
-        id: 0,
-        history: {
-          actions: [
-            { timestamp: 0, text: "Juego completado" },
-            { timestamp: 0, text: "Piedra recogida" },
-            { timestamp: 0, text: "Objetivo cumplido: Mata un caballo" },
-            {
-              timestamp: 0,
-              text: "Objetivo cumplido: Recoge carne de caballo",
-            },
-          ],
-        },
-        email: "a@a.com",
-        nickName: "omar",
-        position: {
-          x: -7.051377296,
-          y: 7.783280849,
-        },
-        color: "#9575cd",
-      },
-      {
-        isGameCreator: false,
-        statistics: {
-          colaboration: true,
-          actionsDone: 10,
-          effectiveCommunication: 7,
-          taskCompletion: 4,
-          exploration: 2,
-          ineffectiveComunication: 3,
-          accompaniment: 2,
-        },
-        id: 0,
-        history: {
-          actions: [
-            { timestamp: 0, text: "Juego completado" },
-            { timestamp: 0, text: "Piedra recogida" },
-            { timestamp: 0, text: "Objetivo cumplido: Mata un caballo" },
-            {
-              timestamp: 0,
-              text: "Objetivo cumplido: Recoge carne de caballo",
-            },
-          ],
-        },
-        email: "b@b.com",
-        nickName: "rodrigo",
-        position: {
-          x: -9.112953186,
-          y: 7.276476383,
-        },
-        color: "#81c784",
-      },
-    ],
-  },
-  {
-    timestamp: 1621890250,
-    players: [
-      {
-        isGameCreator: false,
-        statistics: {
-          colaboration: true,
-          actionsDone: 10,
-          effectiveCommunication: 7,
-          taskCompletion: 4,
-          exploration: 2,
-          ineffectiveComunication: 3,
-          accompaniment: 2,
-        },
-        id: 0,
-        history: {
-          actions: [
-            { timestamp: 0, text: "Juego completado" },
-            { timestamp: 0, text: "Piedra recogida" },
-            { timestamp: 0, text: "Objetivo cumplido: Mata un caballo" },
-            {
-              timestamp: 0,
-              text: "Objetivo cumplido: Recoge carne de caballo",
-            },
-          ],
-        },
-        email: "erick0gomez98@gmail.com",
-        nickName: "erick",
-        position: {
-          x: -3.469911814,
-          y: 6.348711967,
-        },
-        color: "#64b5f6",
-      },
-      {
-        isGameCreator: false,
-        statistics: {
-          colaboration: true,
-          actionsDone: 10,
-          effectiveCommunication: 7,
-          taskCompletion: 4,
-          exploration: 2,
-          ineffectiveComunication: 3,
-          accompaniment: 2,
-        },
-        id: 0,
-        history: {
-          actions: [
-            { timestamp: 0, text: "Juego completado" },
-            { timestamp: 0, text: "Piedra recogida" },
-            { timestamp: 0, text: "Objetivo cumplido: Mata un caballo" },
-            {
-              timestamp: 0,
-              text: "Objetivo cumplido: Recoge carne de caballo",
-            },
-          ],
-        },
-        email: "a@a.com",
-        nickName: "omar",
-        position: {
-          x: -7.051377296,
-          y: 7.783280849,
-        },
-        color: "#9575cd",
-      },
-      {
-        isGameCreator: false,
-        statistics: {
-          colaboration: true,
-          actionsDone: 10,
-          effectiveCommunication: 7,
-          taskCompletion: 4,
-          exploration: 2,
-          ineffectiveComunication: 3,
-          accompaniment: 2,
-        },
-        id: 0,
-        history: {
-          actions: [
-            { timestamp: 0, text: "Juego completado" },
-            { timestamp: 0, text: "Piedra recogida" },
-            { timestamp: 0, text: "Objetivo cumplido: Mata un caballo" },
-            {
-              timestamp: 0,
-              text: "Objetivo cumplido: Recoge carne de caballo",
-            },
-          ],
-        },
-        email: "b@b.com",
-        nickName: "rodrigo",
-        position: {
-          x: -9.112953186,
-          y: 7.276476383,
-        },
-        color: "#81c784",
-      },
-    ],
-  },
-  {
-    timestamp: 1621890251,
-    players: [
-      {
-        isGameCreator: false,
-        statistics: {
-          colaboration: true,
-          actionsDone: 10,
-          effectiveCommunication: 7,
-          taskCompletion: 4,
-          exploration: 2,
-          ineffectiveComunication: 3,
-          accompaniment: 2,
-        },
-        id: 0,
-        history: {
-          actions: [
-            { timestamp: 0, text: "Juego completado" },
-            { timestamp: 0, text: "Piedra recogida" },
-            { timestamp: 0, text: "Objetivo cumplido: Mata un caballo" },
-            {
-              timestamp: 0,
-              text: "Objetivo cumplido: Recoge carne de caballo",
-            },
-          ],
-        },
-        email: "erick0gomez98@gmail.com",
-        nickName: "erick",
-        position: {
-          x: -3.469911814,
-          y: 6.348711967,
-        },
-        color: "#64b5f6",
-      },
-      {
-        isGameCreator: false,
-        statistics: {
-          colaboration: true,
-          actionsDone: 10,
-          effectiveCommunication: 7,
-          taskCompletion: 4,
-          exploration: 2,
-          ineffectiveComunication: 3,
-          accompaniment: 2,
-        },
-        id: 0,
-        history: {
-          actions: [
-            { timestamp: 0, text: "Juego completado" },
-            { timestamp: 0, text: "Piedra recogida" },
-            { timestamp: 0, text: "Objetivo cumplido: Mata un caballo" },
-            {
-              timestamp: 0,
-              text: "Objetivo cumplido: Recoge carne de caballo",
-            },
-          ],
-        },
-        email: "a@a.com",
-        nickName: "omar",
-        position: {
-          x: -7.051377296,
-          y: 7.783280849,
-        },
-        color: "#9575cd",
-      },
-      {
-        isGameCreator: false,
-        statistics: {
-          colaboration: true,
-          actionsDone: 10,
-          effectiveCommunication: 7,
-          taskCompletion: 4,
-          exploration: 2,
-          ineffectiveComunication: 3,
-          accompaniment: 2,
-        },
-        id: 0,
-        history: {
-          actions: [
-            { timestamp: 0, text: "Juego completado" },
-            { timestamp: 0, text: "Piedra recogida" },
-            { timestamp: 0, text: "Objetivo cumplido: Mata un caballo" },
-            {
-              timestamp: 0,
-              text: "Objetivo cumplido: Recoge carne de caballo",
-            },
-          ],
-        },
-        email: "b@b.com",
-        nickName: "rodrigo",
-        position: {
-          x: -9.112953186,
-          y: 7.276476383,
-        },
-        color: "#81c784",
-      },
-    ],
-  },
-];
+const API = process.env.REACT_APP_API_ENDPOINT;
 
-const _data = {
-  labels: [
-    "Acciones Realizadas",
-    "Comunicación Efectiva",
-    "Finalización de tareas",
-    "Exploración",
-    "Comunicación Inefectiva",
-    "Acompañamiento",
-  ],
-  datasets: [
-    {
-      label: "Erick",
-      data: [2, 9, 3, 5, 2, 3],
-      backgroundColor: "rgba(255, 99, 132, 0.2)",
-      borderColor: "rgba(255, 99, 132, 1)",
-      borderWidth: 1,
-    },
-    {
-      label: "Omar",
-      data: [1, 3, 6, 8, 2, 4],
-      backgroundColor: "rgba(144, 99, 132, 0.2)",
-      borderColor: "rgba(144, 99, 132, 1)",
-      borderWidth: 1,
-    },
-    {
-      label: "Rodrigo",
-      data: [6, 8, 9, 1, 3, 4],
-      backgroundColor: "rgba(255, 22, 132, 0.2)",
-      borderColor: "rgba(255, 22, 132, 1)",
-      borderWidth: 1,
-    },
-  ],
+const hexToRgb = (hex: string) => {
+  const h = hex
+    .replace(
+      /^#?([a-f\d])([a-f\d])([a-f\d])$/i,
+      (m: any, r: any, g: any, b: any) => "#" + r + r + g + g + b + b
+    )
+    .substring(1)
+    .match(/.{2}/g);
+
+  return h ? h.map((x: any) => parseInt(x, 16)) : [];
 };
 const ReportDetail: FC = () => {
-  const [timeInterval, setTimeInterval] = useState<number>(1);
+  const { gameId } = useParams<{ gameId: string }>();
+  const [data, setData] = useState<GameDetail>({
+    createdAt: 0,
+    gameDuration: 0,
+    gameFinished: false,
+    gameHistory: [],
+    gameId: 0,
+    playerList: [],
+    roomName: "",
+  });
+  const [dataLoaded, setDataLoaded] = useState<boolean>(false);
+  const [radarData, setRadarData] = useState<{
+    labels: string[];
+    datasets: any[];
+  }>({ labels: [], datasets: [] });
+  const [timeInterval, setTimeInterval] = useState<number>(2);
   const [availableTimeIntervals, setAvailableTimeIntervals] = useState<
     number[]
-  >([1]);
+  >([2]);
   const [players, setPlayers] = useState<Player[]>([]);
   const [pickedPlayer, setPickedPlayer] = useState<Player>({
     color: "",
     email: "",
-    id: 0,
+    playerId: 0,
+    userId: 0,
+    createdAt: 0,
     history: {
-      actions: [
-        { timestamp: 0, text: "Juego completado" },
-        { timestamp: 0, text: "Piedra recogida" },
-        { timestamp: 0, text: "Objetivo cumplido: Mata un caballo" },
-        { timestamp: 0, text: "Objetivo cumplido: Recoge carne de caballo" },
-      ],
+      actions: [],
     },
     isGameCreator: false,
     statistics: {
@@ -2445,31 +85,91 @@ const ReportDetail: FC = () => {
   });
 
   useEffect(() => {
-    d3.select("#plot")
-      .append("svg")
-      .attr("width", width)
-      .attr("height", height)
-      .append("g");
-    // Draw the initial values
-    updateMapView(0);
-    determineTimeIntervals();
-    getPlayersList();
+    const fetchData = async () => {
+      const result = (
+        await axios.get<GameDetail>(`${API}game/gameDetails/${gameId}`)
+      ).data;
+      console.log("result", result);
+      setData(result);
+    };
+    fetchData();
   }, []);
 
+  useEffect(() => {
+    if (data.gameId !== 0) {
+      d3.select("#plot")
+        .append("svg")
+        .attr("width", width)
+        .attr("height", height)
+        .append("g");
+
+      determineTimeIntervals();
+      getPlayersList();
+      setDataLoaded(true);
+
+      formatRadarData();
+    }
+  }, [data]);
+
+  useEffect(() => {
+    if (dataLoaded) {
+      updateMapView(0);
+    }
+  }, [dataLoaded]);
+
+  const formatRadarData = () => {
+    const dataset: any[] = [];
+    data.playerList.forEach((p) => {
+      const stats = p.statistics;
+      const rgb = hexToRgb(p.color);
+      dataset.push({
+        label: p.nickName,
+        data: [
+          stats.actionsDone,
+          stats.effectiveCommunication,
+          stats.taskCompletion,
+          stats.exploration,
+          stats.ineffectiveComunication,
+          stats.accompaniment,
+        ],
+        backgroundColor: `rgba(${rgb[0]}, ${rgb[1]}, ${rgb[2]}, 0.2)`,
+        borderColor: `rgba(${rgb[0]}, ${rgb[0]}, ${rgb[0]}, 1)`,
+        borderWidth: 1,
+      });
+    });
+    const _data = {
+      labels: [
+        "Acciones Realizadas",
+        "Comunicación Efectiva",
+        "Finalización de tareas",
+        "Exploración",
+        "Comunicación Inefectiva",
+        "Acompañamiento",
+      ],
+      datasets: dataset,
+    };
+    setRadarData(_data);
+  };
+
   const getPlayersList = () => {
-    setPlayers(data[0].players);
-    setPickedPlayer(data[0].players[0]);
+    setPlayers(data.playerList);
+    setPickedPlayer(data.playerList[0]);
   };
 
   const updateMapView = (idx: number) => {
     d3.select("#plot").selectAll("*").remove();
-    const playersToUpdate = data[idx].players;
+    const playersToUpdate = data.gameHistory[idx].playersPosition;
     for (let player of playersToUpdate) {
       const xScaleInverted = xScale(player.position.x);
       const yScaleInverted = yScale(player.position.y);
       d3.select("#plot")
         .append("circle")
-        .attr("style", `fill:${player.color}`)
+        .attr(
+          "style",
+          `fill:${
+            data.playerList.find((p) => p.playerId === player.playerId)?.color
+          }`
+        )
         .attr("cx", xScaleInverted)
         .attr("cy", yScaleInverted)
         .attr("r", 5);
@@ -2477,17 +177,17 @@ const ReportDetail: FC = () => {
   };
 
   const determineTimeIntervals = () => {
-    // Data coming from the backend will be in a 1 sec interval by default
-    const totalElements = data.length;
-    const tmpTimeIntervals = [1];
-    // Check if we can show the 5 sec interval
-    if (totalElements / 5 >= 1) {
-      tmpTimeIntervals.push(5);
-    }
-
+    // Data coming from the backend will be in a 2 sec interval by default
+    const totalElements = data.gameHistory.length;
+    const tmpTimeIntervals = [2];
     // Check if we can show the 10 sec interval
     if (totalElements / 10 >= 1) {
       tmpTimeIntervals.push(10);
+    }
+
+    // Check if we can show the 20 sec interval
+    if (totalElements / 20 >= 1) {
+      tmpTimeIntervals.push(20);
     }
 
     // Check if we can show the 30 sec interval
@@ -2508,7 +208,7 @@ const ReportDetail: FC = () => {
       return "";
     }
     return moment
-      .unix(data[value].timestamp)
+      .unix(data.gameHistory[value].timestamp)
       .tz("America/Mexico_City")
       .format("HH:mm:ss");
   };
@@ -2526,37 +226,75 @@ const ReportDetail: FC = () => {
   const handleClickPlayer = (id: number) => {
     console.log("player id", id);
     //@ts-ignore
-    setPickedPlayer(players.find((p) => p.id === id));
+    setPickedPlayer(players.find((p) => p.playerId === id));
   };
 
   return (
     <>
-      <Row>
-        <Col>
-          <Title>Reporte de partida</Title>
-        </Col>
-      </Row>
-      <Row gutter={16}>
-        <Col span={12}>
+      {!dataLoaded ? (
+        <Skeleton />
+      ) : (
+        <>
           <Row>
-            <Col span={6}>
-              <Title level={4}>Intervalo (seg)</Title>
-              <Select
-                defaultValue={1}
-                style={{ width: 120 }}
-                onChange={handleChangeInterval}
-              >
-                {availableTimeIntervals &&
-                  availableTimeIntervals.map((ti) => (
-                    <Option key={ti} value={ti}>
-                      {ti} seg
-                    </Option>
-                  ))}
-              </Select>
+            <Col>
+              <Title>Reporte de partida</Title>
             </Col>
           </Row>
-          <Divider />
+          <Row gutter={16}>
+            <Col span={10}>
+              <Row>
+                <Col span={6}>
+                  <Title level={4}>Intervalo (seg)</Title>
+                  <Select
+                    defaultValue={2}
+                    style={{ width: 120 }}
+                    onChange={handleChangeInterval}
+                  >
+                    {availableTimeIntervals &&
+                      availableTimeIntervals.map((ti) => (
+                        <Option key={ti} value={ti}>
+                          {ti} seg
+                        </Option>
+                      ))}
+                  </Select>
+                </Col>
+              </Row>
+            </Col>
+            <Col span={5}>
+              <Statistic
+                title="Fecha Partida"
+                value={moment
+                  .unix(data.createdAt)
+                  .tz("America/Mexico_City")
+                  .format("DD/MM/YYYY HH:mm:ss")}
+              />
+            </Col>
+            <Col span={3}>
+              <Statistic
+                title="Total de jugadores"
+                value={data.playerList.length}
+              />
+            </Col>
+            <Col span={3}>
+              <Statistic
+                title="Duración"
+                value={new Date(data.gameDuration * 1000)
+                  .toISOString()
+                  .substr(11, 8)}
+              />
+            </Col>
+            <Col span={3}>
+              <Statistic
+                title="Finalizado"
+                value={data.gameFinished ? "SI" : "NO"}
+                valueStyle={{
+                  color: data.gameFinished ? "#3f8600" : "#cf1322",
+                }}
+              />
+            </Col>
+          </Row>
           <Row>
+            <Divider />
             <Col span={24}>
               <Title level={4}>
                 Línea del tiempo (Cada {timeInterval} segundos)
@@ -2564,54 +302,37 @@ const ReportDetail: FC = () => {
               <Slider
                 dots
                 onChange={onSliderChange}
-                step={timeInterval}
+                step={timeInterval / 2}
                 tipFormatter={formatter}
                 min={0}
-                max={data.length - 1}
-              />
-            </Col>
-          </Row>
-        </Col>
-        <Col span={3}>
-          <Statistic title="Fecha Partida" value={"12/05/2021"} />
-        </Col>
-        <Col span={3}>
-          <Statistic title="Total de jugadores" value={3} />
-        </Col>
-        <Col span={3}>
-          <Statistic title="Duración" value={"22 min"} />
-        </Col>
-        <Col span={3}>
-          <Statistic
-            title="Finalizado"
-            value={"SI"}
-            valueStyle={{ color: "#3f8600" }}
-          />
-        </Col>
-      </Row>
-      <Divider />
-      <Row style={{ marginTop: 20 }}>
-        <Col span={12}>
-          <svg
-            id="plot"
-            style={{ backgroundImage: `url(${mapBackground})` }}
-          ></svg>
-        </Col>
-        <Col span={12}>
-          <Row>
-            <Col span={24}>
-              <Title level={4}>Estadísticas Generales</Title>
-              <Radar
-                type
-                data={_data}
-                options={{
-                  animation: false,
-                  scale: { ticks: { beginAtZero: true } },
-                }}
+                max={data.gameHistory.length - 1}
               />
             </Col>
           </Row>
           <Divider />
+          <Row style={{ marginTop: 20 }}>
+            <Col span={12}>
+              <svg
+                id="plot"
+                style={{ backgroundImage: `url(${mapBackground})` }}
+              ></svg>
+            </Col>
+            <Col span={12}>
+              <Row>
+                <Col span={24}>
+                  <Title level={4}>Estadísticas Generales</Title>
+                  <Radar
+                    type
+                    data={radarData}
+                    options={{
+                      animation: false,
+                      scale: { ticks: { beginAtZero: true } },
+                    }}
+                  />
+                </Col>
+              </Row>
+            </Col>
+          </Row>
           <Row gutter={16}>
             <Col span={24}>
               <Title level={4}>Lista de jugadores</Title>
@@ -2622,10 +343,12 @@ const ReportDetail: FC = () => {
                 dataSource={players}
                 renderItem={(player) => (
                   <List.Item
-                    onClick={() => handleClickPlayer(player.id)}
+                    onClick={() => handleClickPlayer(player.playerId)}
                     style={{ cursor: "pointer" }}
                     className={`player-list-item ${
-                      pickedPlayer?.id === player.id ? "active-item-list" : ""
+                      pickedPlayer?.playerId === player.playerId
+                        ? "active-item-list"
+                        : ""
                     }`}
                   >
                     <List.Item.Meta
@@ -2653,8 +376,8 @@ const ReportDetail: FC = () => {
               <DetailCard player={pickedPlayer} />
             </Col>
           </Row>
-        </Col>
-      </Row>
+        </>
+      )}
     </>
   );
 };

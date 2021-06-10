@@ -1,4 +1,5 @@
 import { Card, Col, Divider, Row, Statistic } from "antd";
+import moment from "moment";
 import { FC, useState } from "react";
 import { Player } from "./interfaces";
 import MatchHistory from "./MatchHistory";
@@ -128,35 +129,18 @@ const DetailCard: FC<DetailCardProps> = ({ player }) => {
         <>
           <Row gutter={16}>
             <Col span={8}>
-              <Statistic
-                title="Nombre Jugador"
-                value={player.statistics.actionsDone}
-                valueStyle={{
-                  color:
-                    player.statistics.actionsDone >= 5 ? "#3f8600" : "#cf1322",
-                }}
-              />
+              <Statistic title="Nombre Jugador" value={player.nickName} />
             </Col>
             <Col span={8}>
-              <Statistic
-                title="Email"
-                value={player.statistics.actionsDone}
-                valueStyle={{
-                  color:
-                    player.statistics.actionsDone >= 5 ? "#3f8600" : "#cf1322",
-                }}
-              />
+              <Statistic title="Email" value={player.email} />
             </Col>
             <Col span={8}>
               <Statistic
                 title="Fecha creación"
-                value={player.statistics.effectiveCommunication}
-                valueStyle={{
-                  color:
-                    player.statistics.effectiveCommunication >= 5
-                      ? "#3f8600"
-                      : "#cf1322",
-                }}
+                value={moment
+                  .unix(player.createdAt)
+                  .tz("America/Mexico_City")
+                  .format("DD/MM/YYYY HH:mm:ss")}
               />
             </Col>
           </Row>

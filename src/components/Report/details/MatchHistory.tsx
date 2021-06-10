@@ -9,9 +9,11 @@ interface MatchHistoryProps {
 }
 
 const MatchHistory: FC<MatchHistoryProps> = ({ actions }) => {
+  const orderedActions = [...actions].reverse();
+  console.log("orderedActions", orderedActions);
   return (
     <Steps direction="vertical" size="small">
-      {actions.map((action, k) => {
+      {orderedActions.map((action, k) => {
         const date = moment
           .unix(action.timestamp)
           .tz("America/Mexico_City")
@@ -20,7 +22,9 @@ const MatchHistory: FC<MatchHistoryProps> = ({ actions }) => {
           <Step
             key={k}
             status="finish"
-            title={action.text}
+            title={
+              action.type === "INIT_GAME" ? "Partida iniciada" : action.payload
+            }
             description={date}
           />
         );
