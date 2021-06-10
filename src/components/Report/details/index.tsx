@@ -25,7 +25,7 @@ const { Option } = Select;
 const height = 816;
 const width = 745;
 let xScale = d3.scaleLinear().domain([-160, 190]).range([0, width]);
-let yScale = d3.scaleLinear().domain([-115, 106]).range([height, 0]);
+let yScale = d3.scaleLinear().domain([-194, 184]).range([height, 0]);
 
 const API = process.env.REACT_APP_API_ENDPOINT;
 
