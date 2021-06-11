@@ -1,25 +1,26 @@
-import { FC, useEffect, useState } from "react";
-import * as d3 from "d3";
-import "./report.css";
-import mapBackground from "../../../images/map.png";
-import moment from "moment-timezone";
 import {
+  Avatar,
   Col,
   Divider,
+  List,
   Row,
   Select,
-  Slider,
-  Typography,
-  Avatar,
-  List,
-  Statistic,
   Skeleton,
+  Slider,
+  Statistic,
+  Typography,
 } from "antd";
-import { GameDetail, Player } from "./interfaces";
-import DetailCard from "./DetailCard";
-import { Radar } from "react-chartjs-2";
 import axios from "axios";
+import * as d3 from "d3";
+import moment from "moment-timezone";
+import { FC, useEffect, useState } from "react";
+import { Radar } from "react-chartjs-2";
 import { useParams } from "react-router";
+import { useHistory } from "react-router-dom";
+import mapBackground from "../../../images/map.png";
+import DetailCard from "./DetailCard";
+import { GameDetail, Player } from "./interfaces";
+import "./report.css";
 const { Title } = Typography;
 const { Option } = Select;
 const height = 816;
@@ -41,6 +42,7 @@ const hexToRgb = (hex: string) => {
   return h ? h.map((x: any) => parseInt(x, 16)) : [];
 };
 const ReportDetail: FC = () => {
+  const history = useHistory();
   const { gameId } = useParams<{ gameId: string }>();
   const [data, setData] = useState<GameDetail>({
     createdAt: 0,
@@ -85,12 +87,27 @@ const ReportDetail: FC = () => {
   });
 
   useEffect(() => {
+    const authToken = window.localStorage.getItem("authToken");
     const fetchData = async () => {
-      const result = (
-        await axios.get<GameDetail>(`${API}game/gameDetails/${gameId}`)
-      ).data;
-      console.log("result", result);
-      setData(result);
+      try {
+        const result = (
+          await axios.get<GameDetail>(`${API}game/gameDetails/${gameId}`, {
+            headers: { Authorization: `Bearer ${authToken}` },
+          })
+        ).data;
+        console.log("result", result);
+        setData(result);
+      } catch (err) {
+        if (err && err.response && err.response.data) {
+          const statusCode = err.response.data.statusCode;
+          if (statusCode) {
+            if (statusCode === 403 || statusCode === 401) {
+              window.localStorage.removeItem("authToken");
+              history.push("/login");
+            }
+          }
+        }
+      }
     };
     fetchData();
   }, []);
@@ -224,7 +241,6 @@ const ReportDetail: FC = () => {
   };
 
   const handleClickPlayer = (id: number) => {
-    console.log("player id", id);
     //@ts-ignore
     setPickedPlayer(players.find((p) => p.playerId === id));
   };

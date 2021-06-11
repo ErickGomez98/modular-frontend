@@ -1,10 +1,10 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
-import { GameListItem, GameListItemTable } from "./interfaces";
 import { Skeleton, Table } from "antd";
+import axios from "axios";
 import moment from "moment-timezone";
+import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import "./gameList.css";
+import { GameListItem, GameListItemTable } from "./interfaces";
 
 const API = process.env.REACT_APP_API_ENDPOINT;
 
@@ -48,11 +48,27 @@ const GameList = () => {
   const history = useHistory();
 
   useEffect(() => {
+    const authToken = window.localStorage.getItem("authToken");
     const fetchData = async () => {
-      const result = (await axios.get<GameListItem[]>(`${API}game/gameList`))
-        .data;
-      console.log("result", result);
-      setData(result);
+      try {
+        const result = (
+          await axios.get<GameListItem[]>(`${API}game/gameList`, {
+            headers: { Authorization: `Bearer ${authToken}` },
+          })
+        ).data;
+        console.log("result", result);
+        setData(result);
+      } catch (err) {
+        if (err && err.response && err.response.data) {
+          const statusCode = err.response.data.statusCode;
+          if (statusCode) {
+            if (statusCode === 403 || statusCode === 401) {
+              window.localStorage.removeItem("authToken");
+              history.push("/login");
+            }
+          }
+        }
+      }
     };
     fetchData();
   }, []);

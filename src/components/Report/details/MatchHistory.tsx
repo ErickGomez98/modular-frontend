@@ -10,7 +10,6 @@ interface MatchHistoryProps {
 
 const MatchHistory: FC<MatchHistoryProps> = ({ actions }) => {
   const orderedActions = [...actions].reverse();
-  console.log("orderedActions", orderedActions);
   return (
     <Steps direction="vertical" size="small">
       {orderedActions.map((action, k) => {

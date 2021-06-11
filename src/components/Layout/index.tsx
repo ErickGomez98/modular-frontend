@@ -1,9 +1,10 @@
-import { Layout as Ly, Menu, Breadcrumb } from "antd";
+import { Breadcrumb, Layout as Ly, Menu } from "antd";
 import { FC, useEffect, useState } from "react";
-import "./layout.css";
-import { Switch, Route, useHistory } from "react-router-dom";
-import ReportDetail from "../Report/details";
+import { Switch, useHistory } from "react-router-dom";
+import ProtectedRoute from "../Auth/protectedRoute";
 import GameList from "../GameList";
+import ReportDetail from "../Report/details";
+import "./layout.css";
 
 const { Header, Content, Footer } = Ly;
 
@@ -19,6 +20,11 @@ const Layout: FC = () => {
     history.replace("/reportes");
   }, []);
 
+  const handleSignOut = () => {
+    window.localStorage.removeItem("authToken");
+    history.push("/login");
+  };
+
   return (
     <Ly className="layout">
       <Header>
@@ -32,6 +38,9 @@ const Layout: FC = () => {
           >
             Reportes
           </Menu.Item>
+          <Menu.Item key="2" onClick={() => handleSignOut()}>
+            Cerrar sesión
+          </Menu.Item>
         </Menu>
       </Header>
       <Content style={{ padding: "0 50px" }}>
@@ -40,12 +49,12 @@ const Layout: FC = () => {
         </Breadcrumb>
         <div className="site-layout-content">
           <Switch>
-            <Route path="/report/:gameId">
+            <ProtectedRoute path="/report/:gameId">
               <ReportDetail />
-            </Route>
-            <Route path="/reportes">
+            </ProtectedRoute>
+            <ProtectedRoute path="/reportes">
               <GameList />
-            </Route>
+            </ProtectedRoute>
           </Switch>
         </div>
       </Content>

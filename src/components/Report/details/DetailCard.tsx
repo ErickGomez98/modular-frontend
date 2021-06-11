@@ -51,7 +51,7 @@ const DetailCard: FC<DetailCardProps> = ({ player }) => {
             </Col>
           </Row>
           <Divider />
-          <Title level={3}>Calificaciones de 0 a10 </Title>
+          <Title level={3}>Calificaciones de 0 a 10 </Title>
           <Row gutter={16}>
             <Col span={8}>
               <Statistic
