@@ -1,18 +1,23 @@
 import { Layout as Ly, Menu, Breadcrumb } from "antd";
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import "./layout.css";
 import { Switch, Route, useHistory } from "react-router-dom";
 import ReportDetail from "../Report/details";
+import GameList from "../GameList";
 
 const { Header, Content, Footer } = Ly;
 
 const Layout: FC = () => {
-  const [activeBreadcrumb, setActivebreadcrumb] = useState<string>("");
+  const [activeBreadcrumb, setActivebreadcrumb] = useState<string>("Reportes");
   const history = useHistory();
   const navigateTo = (path: string, breadcrumb: string) => {
     history.push(path);
     setActivebreadcrumb(breadcrumb);
   };
+
+  useEffect(() => {
+    history.replace("/reportes");
+  }, []);
 
   return (
     <Ly className="layout">
@@ -22,18 +27,10 @@ const Layout: FC = () => {
           <Menu.Item
             key="1"
             onClick={() => {
-              navigateTo("/report/223", "Reportes");
+              navigateTo("/reportes", "Reportes");
             }}
           >
             Reportes
-          </Menu.Item>
-          <Menu.Item
-            key="2"
-            onClick={() => {
-              navigateTo("/nav2", "Nav2");
-            }}
-          >
-            nav 2
           </Menu.Item>
         </Menu>
       </Header>
@@ -46,8 +43,8 @@ const Layout: FC = () => {
             <Route path="/report/:gameId">
               <ReportDetail />
             </Route>
-            <Route path="/nav2">
-              <div>Nav 2</div>
+            <Route path="/reportes">
+              <GameList />
             </Route>
           </Switch>
         </div>

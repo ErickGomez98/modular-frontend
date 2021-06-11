@@ -1,8 +1,9 @@
-import { Card, Col, Divider, Row, Statistic } from "antd";
+import { Card, Col, Divider, Row, Statistic, Typography } from "antd";
 import moment from "moment";
 import { FC, useState } from "react";
 import { Player } from "./interfaces";
 import MatchHistory from "./MatchHistory";
+const { Title } = Typography;
 
 const tabList = [
   {
@@ -50,6 +51,7 @@ const DetailCard: FC<DetailCardProps> = ({ player }) => {
             </Col>
           </Row>
           <Divider />
+          <Title level={3}>Calificaciones de 0 a10 </Title>
           <Row gutter={16}>
             <Col span={8}>
               <Statistic

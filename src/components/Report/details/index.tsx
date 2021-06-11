@@ -311,13 +311,13 @@ const ReportDetail: FC = () => {
           </Row>
           <Divider />
           <Row style={{ marginTop: 20 }}>
-            <Col span={12}>
+            <Col lg={12} md={24}>
               <svg
                 id="plot"
                 style={{ backgroundImage: `url(${mapBackground})` }}
               ></svg>
             </Col>
-            <Col span={12}>
+            <Col lg={12} md={24}>
               <Row>
                 <Col span={24}>
                   <Title level={4}>Estadísticas Generales</Title>
